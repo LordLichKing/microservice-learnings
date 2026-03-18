@@ -1,0 +1,39 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    driver-class-name:
+      com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.207.40.238:3306/seater_order?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: ''
+        group: DEFAULT_GROUP
+
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: test_tx_group
+  enable_auto_data_source_proxy: true
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 10.207.40.238:8848
+      namespace: ''
+      group: SEATA_GROUP
+      application: seata-server
+      username: nacos
+      password: nacos
+    config:
+      type: default
+
+logging:
+  level:
+    io.seata: debug
