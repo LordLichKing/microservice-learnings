@@ -1,0 +1,52 @@
+server:
+  port: 7091
+
+spring:
+  application:
+    name: seata-server
+
+logging:
+  config: classpath:logback-spring.xml
+  file:
+    path: ${user.home}/logs/seata
+
+console:
+  user:
+    username: seata
+    password: seata
+
+seata:
+  config:
+    # 配置中心类型：使用 file 表示本地配置（简单起见），也可使用 nacos
+    type: file
+  registry:
+    # 注册中心类型：使用 nacos
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: nacos-server:8848    # 容器内访问 Nacos 的地址
+      group: SEATA_GROUP
+      namespace: ''
+      cluster: default
+      username: nacos
+      password: nacos
+  store:
+    # 事务日志存储模式：db（数据库）
+    mode: db
+    db:
+      datasource: druid
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://mysql8:3306/seata_server?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false
+      user: root
+      password: '123456'
+      min-conn: 5
+      max-conn: 100
+      global-table: global_table
+      branch-table: branch_table
+      lock-table: lock_table
+      query-limit: 100
+  # 服务端事务分组配置（可选，默认即可）
+  # service:
+  #   vgroup-mapping:
+  #     test_tx_group: default
