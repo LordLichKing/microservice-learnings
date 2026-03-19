@@ -28,7 +28,6 @@ public class OrderService {
     }
 
     @GlobalTransactional(name = "create-order", rollbackFor = Exception.class)
-    @Transactional(rollbackFor = Exception.class)
     public void createOrder(String userId, String productId, Integer count) {
         LOGGER.info("==============开始创建订单========================");
         LOGGER.info("当前 XID: {}", RootContext.getXID());
@@ -41,6 +40,13 @@ public class OrderService {
         orderMapper.insert(order);
 
         LOGGER.info("订单创建成功，订单ID: {}", order.getId());
+
+//        try {
+//            Thread.sleep(60_000L);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//        这段时间可以观察数据库里的undo_log数据以及订单状态。
 
         String result = storageClient.decrease(productId, count);
         LOGGER.info("库存扣减结果：{}", result);

@@ -98,12 +98,15 @@ docker rm seata server
 把docker/seata/mysql-connector-j-8.0.33.jar.blob 拷贝到这个目录下, 并去掉后缀.blob
 
 #### 2. 重新启动Seata
-重新启动seata-server, 把上一步拷贝出来的资源文件和jar文件mount到容器里。
+获取docker所在机器的ip地址。我这里是192.168.0.110 （避坑：不要用localhost，也不要用127.0.0.1）
+
+重新启动seata-server, 把上一步拷贝出来的资源文件和jar文件mount到容器里。同时把上面的ip地址也传给SEATA_IP环境变量
 ```
 docker run -d `
   --name seata-server `
   -p 8091:8091 `
   -p 7091:7091 `
+  -e SEATA_IP=192.168.0.110 `
   -v D:/docker/seata/config/resources:/seata-server/resources `
   -v D:/docker/seata/jdbc:/lib/jdbc `
   --network seata-demo `
@@ -116,4 +119,34 @@ docker run -d `
 登录之前的Nacos, 到"服务管理"->"服务列表" 应该能看到你的 Seata.
 
 至此，所有准备工作完毕。
+
+# 运行测试
+
+### 1. 启动服务
+
+先启动storage-service
+
+```
+java -jar storage-service\target\storage-service-1.0-SNAPSHOT.jar
+```
+(你也可以在IDE里直接启动Application的main方法)
+
+在nacos上确认 storage-service 已经启动之后，启动order-service。方法同上。
+
+### 2. 测试
+
+1. 正常情况
+
+```
+$ curl -X POST "http://localhost:8081/order/create?userId=user-1&productId=product-1&count=5"
+```
+
+2. 异常情况
+
+```
+$ curl -X POST "http://localhost:8081/order/create?userId=user-1&productId=product-1&count=15"
+```
+在order service里的日志里，会看到你的事务是提交，还是失败。
+在失败的情况下, mysql不会在order表里插入数据，因为已经被回滚了。
+
 
