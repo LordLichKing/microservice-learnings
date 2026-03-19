@@ -25,7 +25,7 @@ seata:
   registry:
     type: nacos
     nacos:
-      server-addr: 10.207.40.238:8848
+      server-addr: localhost:8848
       namespace: ''
       group: SEATA_GROUP
       application: seata-server
@@ -36,4 +36,4 @@ seata:
 
 logging:
   level:
-    io.seata: debug
+    org.apache.seata: debug

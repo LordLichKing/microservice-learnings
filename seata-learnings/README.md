@@ -5,9 +5,11 @@
 # 准备工作
 
 1. Docker
-2. Mysql
-3. Seata
-4. Nacos
+2. Mysql 8+
+3. Nacos Server 2.2.3+
+4. Seata Server 2.5.0+
+5. Java 21+
+6. 小火箭 (拉镜像可能需要，尚不知道aliyun的节点能不能用，没有工具的可以尝试一下)
 
 注意事项：
 * 本例全部基于windows环境。并且默认已经安装docker。
@@ -29,7 +31,7 @@ docker run -d `
   --name mysql8 `
   -e MYSQL_ROOT_PASSWORD=123456 `
   -p 3306:3306 `
-  -v C:\Users\Administrator\mysql-data\data:/var/lib/mysql `
+  -v D:\docker\mysql\data:/var/lib/mysql `
   --network seata-demo `
   mysql:8.0 `
   --default-authentication-plugin=mysql_native_password `
@@ -39,13 +41,12 @@ docker run -d `
 ( 注意，-v 命令是要把你机器上的某个目录mount到container里去，请自行修改你使用的目录。 如果你是linux系统，把其中mount的地址换成linux操作系统能识别的地址，
 比如: ```-v /root/mysql/data:/var/lib/mysql```)
 
-在运行完这个命令后，会自动创建 seata_server 的库。你也可以选择不自动创建，在后续进入mysql容器后手动创建。
 本次创建的端口号是3306（默认），密码是123456。
 
 #### 2. 创建并初始化业务库
 
 * 通过如下命令进入mysql容器```docker exec -it mysql8 mysql -uroot -p123456```
-* 执行 docker/mysql/init.sql 脚本
+* 执行 docker/mysql/init.sql 脚本 (在本工程的目录下)
 
 #### 3. 创建并初始化seata_server库
 创建并切换到seata_server库
@@ -56,9 +57,6 @@ USE seata_server;
 运行seata官方的建库脚本: https://github.com/apache/incubator-seata/blob/2.5.0/script/server/db/mysql.sql
 
 ### 安装Nacos
-
-先创建一个docker network, 名字取为seata-demo
- ```docker network create seata-demo```
 
 拉取并启动Nacos
 ```
@@ -97,10 +95,10 @@ docker stop seata-server
 docker rm seata server
 ```
 再找一个目录，这里我用 ```D:\docker\seata\seata\jdbc```
-把docker/seata/mysql-connector-j-8.0.33.jar 拷贝到这个目录下
+把docker/seata/mysql-connector-j-8.0.33.jar.blob 拷贝到这个目录下, 并去掉后缀.blob
 
 #### 2. 重新启动Seata
-重新启动seata-server, 把上一步拷贝出来的资源文件mount到容器里。
+重新启动seata-server, 把上一步拷贝出来的资源文件和jar文件mount到容器里。
 ```
 docker run -d `
   --name seata-server `
