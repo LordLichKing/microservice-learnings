@@ -24,5 +24,6 @@
 
     <modules>
         <module>01-bom</module>
+        <module>02-prompt</module>
     </modules>
 </project>
