@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/01-bom/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/01-bom/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/02-prompt/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
