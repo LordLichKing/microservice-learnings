@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: spring-ai
+  ai:
+    dashscope:
+      api-key: sk-9090ef112cab4d41ba5690532012d8db
+server:
+  port: 8000
